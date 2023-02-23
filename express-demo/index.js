@@ -53,6 +53,32 @@ app.post("/api/courses", async (req, res) => {
   }
 });
 
+//Handling a put request with express api
+app.put("/api/courses/:id", async (req, res) => {
+  const course = courses.find(
+    (course) => course.id === parseInt(req.params.id)
+  );
+  if (!course) res.status(404).send("Course Not Found!");
+
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  try {
+    //validate user input based on the conditions set in the schema object
+    const value = await schema.validateAsync(req.body);
+
+    //update course
+    course.name = value.name;
+
+    //return course
+    res.send(course);
+  } catch (err) {
+    //return error if input validation fails
+    res.send(err.details[0].message);
+  }
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
