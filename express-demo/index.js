@@ -24,7 +24,7 @@ app.get("/api/courses/:id", (req, res) => {
   const course = courses.find(
     (course) => course.id === parseInt(req.params.id)
   );
-  if (!course) res.status(404).send("Course Not Found!");
+  if (!course) return res.status(404).send("Course Not Found!");
   res.send(course);
 });
 
@@ -53,7 +53,7 @@ app.put("/api/courses/:id", async (req, res) => {
   const course = courses.find(
     (course) => course.id === parseInt(req.params.id)
   );
-  if (!course) res.status(404).send("Course Not Found!");
+  if (!course) return res.status(404).send("Course Not Found!");
 
   try {
     //validate user input based on the conditions set in the schema object
