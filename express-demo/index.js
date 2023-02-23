@@ -28,6 +28,31 @@ app.get("/api/courses/:id", (req, res) => {
   res.send(course);
 });
 
+//Handling post request with express api
+app.post("/api/courses", async (req, res) => {
+  //Create a schema object with the input requirements
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  try {
+    //validate user input based on the conditions set in the schema object
+    const value = await schema.validateAsync(req.body);
+
+    //create and return new course if the input is valid
+    const course = {
+      id: courses.length + 1,
+      name: value.name,
+    };
+
+    courses.push(course);
+    res.send(course);
+  } catch (err) {
+    //return error if input validation fails
+    res.send(err.details[0].message);
+  }
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
